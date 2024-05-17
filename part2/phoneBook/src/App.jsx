@@ -37,7 +37,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Phonebook</h1>
+      <h1>Phone Book</h1>
       <Filter filter={filter} setFilter={setFilter} />
       <hr />
       <Form
