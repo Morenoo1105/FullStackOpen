@@ -1,9 +1,11 @@
 import React from "react";
+import Notification from "./Notification";
 
-const Form = ({ newUser, addNewUser, handleUserChange }) => {
+const Form = ({ newUser, addNewUser, handleUserChange, notification }) => {
   return (
     <form onSubmit={addNewUser}>
       <h2>Add a new Person</h2>
+      {notification && <Notification message={notification} />}
       <div>
         Name:{" "}
         <input

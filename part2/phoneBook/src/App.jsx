@@ -8,8 +8,19 @@ import userService from "./services/users";
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newUser, setNewUser] = useState({ name: "", phone: "", id: "" });
-
   const [filter, setFilter] = useState("");
+  const [notification, setNotification] = useState(null);
+
+  useEffect(() => {
+    userService
+      .getAll()
+      .then((response) => {
+        setPersons(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const handleUserChange = (field, event) =>
     setNewUser({ ...newUser, [field]: event.target.value });
@@ -36,10 +47,30 @@ const App = () => {
           .then((response) => {
             setPersons(
               persons.map((person) =>
-                person.id !== updatingPerson.id ? person : response.data
+                person.id !== updatingPerson.id ? person : response
               )
             );
+            setNotification({
+              message: `Phone number updated to ${newUser.phone}`,
+              error: false,
+            });
             setNewUser({ name: "", phone: "", id: "" });
+            setTimeout(() => {
+              setNotification(null);
+            }, 5000);
+          })
+          .catch((error) => {
+            setNotification({
+              message: `Information of ${newUser.name} has already been removed from the server.`,
+              error: true,
+            });
+            setPersons(
+              persons.filter((person) => person.id !== updatingPerson.id)
+            );
+            setNewUser({ name: "", phone: "", id: "" });
+            setTimeout(() => {
+              setNotification(null);
+            }, 5000);
           });
       }
       return;
@@ -61,10 +92,30 @@ const App = () => {
           .then((response) => {
             setPersons(
               persons.map((person) =>
-                person.id !== updatingPerson.id ? person : response.data
+                person.id !== updatingPerson.id ? person : response
               )
             );
+            setNotification({
+              message: `Phone owner updated to ${newUser.name}`,
+              error: false,
+            });
             setNewUser({ name: "", phone: "", id: "" });
+            setTimeout(() => {
+              setNotification(null);
+            }, 5000);
+          })
+          .catch((error) => {
+            setNotification({
+              message: `Number ${newUser.phone} has already been removed from the server.`,
+              error: true,
+            });
+            setPersons(
+              persons.filter((person) => person.id !== updatingPerson.id)
+            );
+            setNewUser({ name: "", phone: "", id: "" });
+            setTimeout(() => {
+              setNotification(null);
+            }, 5000);
           });
       }
       return;
@@ -77,8 +128,15 @@ const App = () => {
         id: (persons.length + 1).toString(),
       })
       .then((response) => {
-        setPersons([...persons, response.data]);
+        setPersons([...persons, response]);
+        setNotification({
+          message: `User ${newUser.name} added to the phonebook.`,
+          error: false,
+        });
         setNewUser({ name: "", phone: "", id: "" });
+        setTimeout(() => {
+          setNotification(null);
+        }, 5000);
       });
   };
 
@@ -88,17 +146,30 @@ const App = () => {
     const accept = window.confirm(`Delete ${user.name} profile?`);
 
     if (accept) {
-      userService.deleteUser(id).then(() => {
-        setPersons(persons.filter((person) => person.id !== id));
-      });
+      userService
+        .deleteUser(id)
+        .then(() => {
+          setPersons(persons.filter((person) => person.id !== id));
+          setNotification({
+            message: `User ${newUser.name} deleted from the phonebook.`,
+            error: false,
+          });
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
+        })
+        .catch((error) => {
+          setPersons(persons.filter((person) => person.id !== id));
+          setNotification({
+            message: `Information of ${user.name} has already been removed from the server.`,
+            error: true,
+          });
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
+        });
     }
   };
-
-  useEffect(() => {
-    userService.getAll().then((response) => {
-      setPersons(response.data);
-    });
-  }, []);
 
   return (
     <div>
@@ -109,6 +180,7 @@ const App = () => {
         newUser={newUser}
         addNewUser={addNewUser}
         handleUserChange={handleUserChange}
+        notification={notification}
       />
       <hr />
       <UserList users={persons} filter={filter} deletion={deleteUser} />
