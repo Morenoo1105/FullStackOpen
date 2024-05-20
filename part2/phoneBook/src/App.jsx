@@ -7,7 +7,7 @@ import userService from "./services/users";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [newUser, setNewUser] = useState({ name: "", phone: "", id: "" });
+  const [newUser, setNewUser] = useState({ name: "", phone: "" });
   const [filter, setFilter] = useState("");
   const [notification, setNotification] = useState(null);
 
@@ -54,7 +54,7 @@ const App = () => {
               message: `Phone number updated to ${newUser.phone}`,
               error: false,
             });
-            setNewUser({ name: "", phone: "", id: "" });
+            setNewUser({ name: "", phone: "" });
             setTimeout(() => {
               setNotification(null);
             }, 5000);
@@ -67,7 +67,7 @@ const App = () => {
             setPersons(
               persons.filter((person) => person.id !== updatingPerson.id)
             );
-            setNewUser({ name: "", phone: "", id: "" });
+            setNewUser({ name: "", phone: "" });
             setTimeout(() => {
               setNotification(null);
             }, 5000);
@@ -99,7 +99,7 @@ const App = () => {
               message: `Phone owner updated to ${newUser.name}`,
               error: false,
             });
-            setNewUser({ name: "", phone: "", id: "" });
+            setNewUser({ name: "", phone: "" });
             setTimeout(() => {
               setNotification(null);
             }, 5000);
@@ -112,7 +112,7 @@ const App = () => {
             setPersons(
               persons.filter((person) => person.id !== updatingPerson.id)
             );
-            setNewUser({ name: "", phone: "", id: "" });
+            setNewUser({ name: "", phone: "" });
             setTimeout(() => {
               setNotification(null);
             }, 5000);
@@ -121,23 +121,18 @@ const App = () => {
       return;
     }
 
-    userService
-      .create({
-        ...newUser,
-        // Calculates next id (by default it was generating an alphanumeric id)
-        id: (persons.length + 1).toString(),
-      })
-      .then((response) => {
-        setPersons([...persons, response]);
-        setNotification({
-          message: `User ${newUser.name} added to the phonebook.`,
-          error: false,
-        });
-        setNewUser({ name: "", phone: "", id: "" });
-        setTimeout(() => {
-          setNotification(null);
-        }, 5000);
+    userService.create(newUser).then((response) => {
+      console.log(response);
+      setPersons(response);
+      setNotification({
+        message: `User ${newUser.name} added to the phonebook.`,
+        error: false,
       });
+      setNewUser({ name: "", phone: "" });
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
+    });
   };
 
   const deleteUser = (id) => {
@@ -151,7 +146,7 @@ const App = () => {
         .then(() => {
           setPersons(persons.filter((person) => person.id !== id));
           setNotification({
-            message: `User ${newUser.name} deleted from the phonebook.`,
+            message: `User ${user.name} deleted from the phonebook.`,
             error: false,
           });
           setTimeout(() => {
