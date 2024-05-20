@@ -1,12 +1,17 @@
-const UserItem = ({ user }) => {
+import userService from "../services/users";
+
+const UserItem = ({ user, deletion }) => {
   return (
     <p>
-      {user.id}. {user.name} - {user.phone}
+      <span>
+        {user.id}. {user.name} - {user.phone}
+      </span>{" "}
+      <button onClick={() => deletion(user.id)}>X</button>
     </p>
   );
 };
 
-const UserList = ({ users, filter }) => {
+const UserList = ({ users, filter, deletion }) => {
   const filteredUsersByName = users.filter((user) =>
     user.name.toLowerCase().includes(filter.toLowerCase())
   );
@@ -21,7 +26,7 @@ const UserList = ({ users, filter }) => {
     <section>
       <h2>List of Phone Numbers</h2>
       {filteredUsers.map((user) => (
-        <UserItem key={user.name} user={user} />
+        <UserItem key={user.name} user={user} deletion={deletion} />
       ))}
     </section>
   );
