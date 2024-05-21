@@ -28,26 +28,29 @@ const App = () => {
   const addNewUser = (event) => {
     event.preventDefault();
 
-    if (!newUser.name) return alert("Please enter a name.");
-    if (!newUser.phone) return alert("Please enter a phone number.");
+    const samePerson = persons.find(
+      (person) => person.name.toLowerCase() === newUser.name.toLowerCase()
+    );
 
-    if (persons.some((person) => person.name === newUser.name)) {
+    if (samePerson && samePerson.phone === newUser.phone) {
+      alert(`${newUser.name} is already in the phonebook.`);
+      return;
+    }
+
+    if (samePerson && samePerson.phone !== newUser.phone) {
       if (
         window.confirm(
           `"${newUser.name}" already exists in the phonebook. Would you like to replace the old number with the new one?`
         )
       ) {
-        const updatingPerson = persons.find(
-          (person) => person.name === newUser.name
-        );
-        const updatedPerson = { ...updatingPerson, phone: newUser.phone };
+        const updatedPerson = { ...samePerson, phone: newUser.phone };
 
         userService
-          .update(updatingPerson.id, updatedPerson)
+          .update(samePerson.id, updatedPerson)
           .then((response) => {
             setPersons(
               persons.map((person) =>
-                person.id !== updatingPerson.id ? person : response
+                person.id !== samePerson.id ? person : response
               )
             );
             setNotification({
@@ -65,9 +68,8 @@ const App = () => {
               error: true,
             });
             setPersons(
-              persons.filter((person) => person.id !== updatingPerson.id)
+              persons.filter((person) => person.name !== samePerson.name)
             );
-            setNewUser({ name: "", phone: "" });
             setTimeout(() => {
               setNotification(null);
             }, 5000);
@@ -76,63 +78,30 @@ const App = () => {
       return;
     }
 
-    if (persons.some((person) => person.phone === newUser.phone)) {
-      const updatingPerson = persons.find(
-        (person) => person.phone === newUser.phone
-      );
-      if (
-        window.confirm(
-          `"${newUser.phone}" belongs to ${updatingPerson.name} in the phonebook. Would you like to replace the old owner with the new one?`
-        )
-      ) {
-        const updatedPerson = { ...updatingPerson, name: newUser.name };
-
-        userService
-          .update(updatingPerson.id, updatedPerson)
-          .then((response) => {
-            setPersons(
-              persons.map((person) =>
-                person.id !== updatingPerson.id ? person : response
-              )
-            );
-            setNotification({
-              message: `Phone owner updated to ${newUser.name}`,
-              error: false,
-            });
-            setNewUser({ name: "", phone: "" });
-            setTimeout(() => {
-              setNotification(null);
-            }, 5000);
-          })
-          .catch((error) => {
-            setNotification({
-              message: `Number ${newUser.phone} has already been removed from the server.`,
-              error: true,
-            });
-            setPersons(
-              persons.filter((person) => person.id !== updatingPerson.id)
-            );
-            setNewUser({ name: "", phone: "" });
-            setTimeout(() => {
-              setNotification(null);
-            }, 5000);
+    if (!samePerson) {
+      userService
+        .create(newUser)
+        .then((response) => {
+          setPersons(persons.concat(response));
+          setNotification({
+            message: `User ${newUser.name} added to the phonebook.`,
+            error: false,
           });
-      }
-      return;
+          setNewUser({ name: "", phone: "" });
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
+        })
+        .catch((error) => {
+          setNotification({
+            message: error.response.data.error,
+            error: true,
+          });
+          setTimeout(() => {
+            setNotification(null);
+          }, 5000);
+        });
     }
-
-    userService.create(newUser).then((response) => {
-      console.log(response);
-      setPersons(response);
-      setNotification({
-        message: `User ${newUser.name} added to the phonebook.`,
-        error: false,
-      });
-      setNewUser({ name: "", phone: "" });
-      setTimeout(() => {
-        setNotification(null);
-      }, 5000);
-    });
   };
 
   const deleteUser = (id) => {

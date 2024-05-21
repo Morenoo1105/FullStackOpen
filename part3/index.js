@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const Person = require("./models/person");
 
 const app = express();
 app.use(express.static("dist"));
@@ -18,86 +19,107 @@ morgan.token("content", (request) =>
     : null
 );
 
-let phonebook = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    phone: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    phone: "39-44-5323523",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    phone: "12-43-234345",
-  },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    phone: "39-23-6423122",
-  },
-];
-
 const PORT = process.env.PORT || 3001;
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-app.get("/", (req, res) => {
-  res.send("<h1>Hello Sir!</h1>");
-});
-
-app.get("/info", (req, res) => {
-  res.send(
-    `<p>
-    Phonebook has info for ${phonebook.length} people.</p> 
-    <p>${new Date()}</p>`
-  );
+app.get("/api/info", (req, res) => {
+  Person.find({}).then((persons) => {
+    res.send(
+      `<p>
+      Phonebook has info for ${persons.length} people.</p> 
+      <p>${new Date()}</p>`
+    );
+  });
 });
 
 app.get("/api/persons", (req, res) => {
-  res.send(phonebook);
+  Person.find({}).then((persons) => {
+    res.json(persons);
+  });
 });
 
-app.get("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const person = phonebook.find((person) => person.id === id);
-
-  if (!person) res.status(404).send("Person not found");
-
-  res.send(person);
+app.get("/api/persons/:id", (req, res, next) => {
+  Person.findById(req.params.id)
+    .then((person) => {
+      if (person) {
+        res.json(person);
+      } else {
+        res.status(404).end();
+      }
+    })
+    .catch((error) => next(error));
 });
 
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
   const person = req.body;
   if (!person.name)
     return res.status(400).json({
       error: "Name missing",
     });
 
-  if (phonebook.find((p) => p.name === person.name))
-    return res.status(400).json({
-      error: "Name must be unique",
-    });
+  // if (phonebook.find((p) => p.name === person.name))
+  //   return res.status(400).json({
+  //     error: "Name must be unique",
+  //   });
 
   if (!person.phone)
     return res.status(400).json({
       error: "Phone number missing",
     });
 
-  const id = Math.floor(Math.random() * 10000);
-  person.id = id;
-  phonebook = phonebook.concat(person);
-
-  res.send(phonebook);
+  Person.create(person)
+    .then((newPerson) => {
+      res.json(newPerson);
+    })
+    .catch((error) => next(error));
 });
 
-app.delete("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  phonebook = phonebook.filter((person) => person.id !== id);
+app.put("/api/persons/:id", (req, res, next) => {
+  const body = req.body;
 
-  res.status(204).end();
+  const person = {
+    name: body.name,
+    phone: body.phone,
+  };
+
+  Person.findByIdAndUpdate(req.params.id, person, {
+    new: true,
+    runValidators: true,
+    context: "query",
+  })
+    .then((updatedUser) => {
+      res.json(updatedUser);
+    })
+    .catch((error) => next(error));
 });
+
+app.delete("/api/persons/:id", (req, res, next) => {
+  Person.findByIdAndDelete(req.params.id)
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch((error) => next(error));
+});
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: "Unknown Endpoint" });
+};
+
+app.use(unknownEndpoint);
+
+const errorHandler = (error, request, response, next) => {
+  console.log("Error Message:", error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "Malformatted Id" });
+  } else if (error.name === "ValidationError") {
+    return response.status(400).json({ error: error.message });
+  }
+
+  next(error);
+};
+
+app.use(errorHandler);
