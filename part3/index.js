@@ -60,11 +60,6 @@ app.post("/api/persons", (req, res, next) => {
       error: "Name missing",
     });
 
-  // if (phonebook.find((p) => p.name === person.name))
-  //   return res.status(400).json({
-  //     error: "Name must be unique",
-  //   });
-
   if (!person.phone)
     return res.status(400).json({
       error: "Phone number missing",

@@ -64,12 +64,9 @@ const App = () => {
           })
           .catch((error) => {
             setNotification({
-              message: `Information of ${newUser.name} has already been removed from the server.`,
+              message: error.response.data.error,
               error: true,
             });
-            setPersons(
-              persons.filter((person) => person.name !== samePerson.name)
-            );
             setTimeout(() => {
               setNotification(null);
             }, 5000);
