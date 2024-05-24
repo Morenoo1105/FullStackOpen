@@ -8,6 +8,7 @@ const blogRouter = require("./controllers/blogs");
 const middleware = require("./utils/middleware");
 const logger = require("./utils/logger");
 const mongoose = require("mongoose");
+const userRouter = require("./controllers/users");
 
 mongoose.set("strictQuery", false);
 
@@ -41,6 +42,7 @@ morgan.token("content", (request) =>
 );
 
 app.use("/api/blogs", blogRouter);
+app.use("/api/users", userRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

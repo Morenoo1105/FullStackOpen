@@ -9,5 +9,18 @@ Content-Type: application/json
       "title": "Type wars",
       "author": "Robert C. Martin",
       "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-      "likes": 2
+      "likes": 2,
+      "user": "665058ae84a9b7a714536d0c"
+}
+
+
+###
+
+POST http://localhost:3003/api/users HTTP/1.1
+Content-Type: application/json
+
+{
+      "username": "eee",
+      "name": "Superuser2",
+      "password": "eee"
 }

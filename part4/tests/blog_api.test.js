@@ -138,7 +138,7 @@ describe("deletion of a blog", () => {
   });
 });
 
-describe.only("updating a blog", () => {
+describe("updating a blog", () => {
   beforeEach(async () => {
     await Blog.deleteMany({});
 
@@ -149,7 +149,7 @@ describe.only("updating a blog", () => {
     await blogObject.save();
   });
 
-  test.only("blog likes can be updated", async () => {
+  test("blog likes can be updated", async () => {
     const blogsAtStart = await helper.blogsInDb();
     const blogToUpdate = blogsAtStart[0];
 
