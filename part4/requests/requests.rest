@@ -1,4 +1,4 @@
-DELETE http://localhost:3003/api/blogs/665454bf30647268fb3e4a85
+DELETE http://localhost:3003/api/blogs/665455da4bfe89a57878bf14
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVlZSIsImlkIjoiNjY1MDViMjcwMjhjYjlhZTk0OTNiYmZiIiwiaWF0IjoxNzE2ODAyMzI2fQ.UMXn0vep6pet9fDn9DJ921rmeqVytteXbK_YRS_2VW8
 
 ###
@@ -8,7 +8,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVlZSIsImlkIjoiNjY1MDViMjcwMjhjYjlhZTk0OTNiYmZiIiwiaWF0IjoxNzE2ODAyMzI2fQ.UMXn0vep6pet9fDn9DJ921rmeqVytteXbK_YRS_2VW8
 
 {
-      "title": "Type wars 3",
+      "title": "Type wars 2",
       "author": "Robert C. Martin",
       "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
       "likes": 2
