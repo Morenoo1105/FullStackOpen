@@ -42,6 +42,8 @@ morgan.token("content", (request) =>
     : null
 );
 
+app.use(middleware.tokenExtractor);
+
 app.use("/api/blogs", blogRouter);
 app.use("/api/users", userRouter);
 app.use("/api/login", loginRouter);

@@ -13,15 +13,6 @@ blogsRouter.get("/", async (request, response) => {
   response.json(blogs);
 });
 
-const getTokenFrom = (request) => {
-  const authorization = request.get("authorization");
-  if (authorization && authorization.startsWith("Bearer ")) {
-    console.log(authorization);
-    return authorization.replace("Bearer ", "");
-  }
-  return null;
-};
-
 blogsRouter.post("/", async (request, response) => {
   const body = request.body;
 
@@ -29,7 +20,7 @@ blogsRouter.post("/", async (request, response) => {
 
   if (!body.title || !body.url) return response.status(400).end();
 
-  const decodedToken = jwt.verify(getTokenFrom(request), config.SECRET);
+  const decodedToken = jwt.verify(request.token, config.SECRET);
   if (!decodedToken.id) {
     return response.status(401).json({ error: "invalid token" });
   }
@@ -55,6 +46,16 @@ blogsRouter.delete("/:id", async (request, response) => {
   const blog = await Blog.findById(request.params.id);
 
   if (!blog) return response.status(404).end();
+
+  const decodedToken = jwt.verify(request.token, config.SECRET);
+
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: "invalid token" });
+  }
+
+  if (blog.user.toString() !== decodedToken.id) {
+    return response.status(401).json({ error: "user not authorized" });
+  }
 
   await Blog.findByIdAndDelete(request.params.id);
 
