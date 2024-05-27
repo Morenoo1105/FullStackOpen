@@ -1,11 +1,11 @@
 DELETE http://localhost:3003/api/blogs/665455da4bfe89a57878bf14
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVlZSIsImlkIjoiNjY1MDViMjcwMjhjYjlhZTk0OTNiYmZiIiwiaWF0IjoxNzE2ODAyMzI2fQ.UMXn0vep6pet9fDn9DJ921rmeqVytteXbK_YRS_2VW8
+Authorization: Bearer ***
 
 ###
 
 POST http://localhost:3003/api/blogs HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVlZSIsImlkIjoiNjY1MDViMjcwMjhjYjlhZTk0OTNiYmZiIiwiaWF0IjoxNzE2ODAyMzI2fQ.UMXn0vep6pet9fDn9DJ921rmeqVytteXbK_YRS_2VW8
+Authorization: Bearer ***
 
 {
       "title": "Type wars 2",
