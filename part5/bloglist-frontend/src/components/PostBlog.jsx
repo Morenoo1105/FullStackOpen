@@ -23,6 +23,7 @@ const PostBlog = ({ handleBlogPost }) => {
             type="text"
             value={title}
             name="Title"
+            placeholder="title"
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
@@ -32,6 +33,7 @@ const PostBlog = ({ handleBlogPost }) => {
             type="text"
             value={author}
             name="Author"
+            placeholder="author"
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
@@ -41,6 +43,7 @@ const PostBlog = ({ handleBlogPost }) => {
             type="text"
             value={url}
             name="Url"
+            placeholder="url"
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
