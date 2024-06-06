@@ -67,7 +67,7 @@ describe("Blog app", () => {
       await page.getByRole("button", { name: "login" }).click();
     });
 
-    test.only("a new blog can be created", async ({ page }) => {
+    test("a new blog can be created", async ({ page }) => {
       const title = "Test Title";
       const author = "Test Author";
       const url = "http://test.com";
@@ -89,6 +89,71 @@ describe("Blog app", () => {
       const listItem = page.locator(".blogListItem").last();
 
       await expect(listItem).toBeVisible();
+    });
+
+    describe("and a blog exists", () => {
+      beforeEach(async ({ page }) => {
+        const title = "Test Title";
+        const author = "Test Author";
+        const url = "http://test.com";
+
+        await page.getByRole("button", { name: "New Blog" }).click();
+
+        await page.getByTestId("title").fill(title);
+        await page.getByTestId("author").fill(author);
+        await page.getByTestId("url").fill(url);
+
+        await page.getByRole("button", { name: "Create" }).click();
+      });
+
+      test("a blog can be edited/liked", async ({ page }) => {
+        await page.getByRole("button", { name: "View" }).first().click();
+
+        await page.getByRole("button", { name: "like" }).click();
+
+        await expect(page.getByText("likes 1")).toBeVisible();
+      });
+
+      test("a blog can be deleted by owner", async ({ page }) => {
+        const listItem = page.locator(".blogListItem").last();
+
+        await expect(listItem).toBeVisible();
+
+        await page.getByRole("button", { name: "View" }).first().click();
+
+        await page.getByRole("button", { name: "delete" }).first().click();
+
+        page.on("dialog", (dialog) => dialog.accept());
+
+        await expect(listItem).not.toBeVisible();
+      });
+
+      test.only("a blog cannot be deleted by non-owner", async ({
+        page,
+        request,
+      }) => {
+        await request.post("http://localhost:5173/api/users", {
+          data: {
+            username: "user",
+            name: "normaluser",
+            password: "pass",
+          },
+        });
+
+        await page.getByRole("button", { name: "Log out" }).click();
+
+        await page.getByTestId("username").fill("user");
+        await page.getByTestId("password").fill("pass");
+        await page.getByRole("button", { name: "login" }).click();
+
+        await page.getByRole("button", { name: "View" }).first().click();
+
+        await expect(page.getByRole("button", { name: "like" })).toBeVisible();
+
+        await expect(
+          page.getByRole("button", { name: "delete" })
+        ).not.toBeVisible();
+      });
     });
   });
 });
