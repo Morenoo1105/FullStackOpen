@@ -159,7 +159,7 @@ describe("Blog app", () => {
     });
 
     // May only work in debug mode for webkit explorer
-    test.only("Blogs are sorted by likes", async ({ page }) => {
+    test("Blogs are sorted by likes", async ({ page }) => {
       await createBlog(page, "First", "Author", "http://first.com");
       await createBlog(page, "Second", "Author", "http://second.com");
       await createBlog(page, "Third", "Author", "http://third.com");
