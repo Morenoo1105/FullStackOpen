@@ -1,5 +1,7 @@
 const { test, expect, beforeEach, describe } = require("@playwright/test");
 
+import { createBlog } from "./helpers";
+
 describe("Blog app", () => {
   beforeEach(async ({ page, request }) => {
     await request.post("http://localhost:5173/api/testing/reset");
@@ -128,7 +130,7 @@ describe("Blog app", () => {
         await expect(listItem).not.toBeVisible();
       });
 
-      test.only("a blog cannot be deleted by non-owner", async ({
+      test("a blog cannot be deleted by non-owner", async ({
         page,
         request,
       }) => {
@@ -154,6 +156,27 @@ describe("Blog app", () => {
           page.getByRole("button", { name: "delete" })
         ).not.toBeVisible();
       });
+    });
+
+    // May only work in debug mode for webkit explorer
+    test.only("Blogs are sorted by likes", async ({ page }) => {
+      await createBlog(page, "First", "Author", "http://first.com");
+      await createBlog(page, "Second", "Author", "http://second.com");
+      await createBlog(page, "Third", "Author", "http://third.com");
+
+      const first = page.locator(".blogListItem").first();
+
+      await expect(first).toContainText("First");
+
+      await page.getByRole("button", { name: "View" }).last().click();
+      await page.getByRole("button", { name: "like" }).click();
+      await page.getByRole("button", { name: "like" }).click();
+
+      await page.getByRole("button", { name: "hide" }).click();
+
+      const newFirst = page.locator(".blogListItem").first();
+
+      await expect(newFirst).toContainText("Third");
     });
   });
 });
