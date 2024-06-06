@@ -98,24 +98,29 @@ const App = () => {
   if (user === null) {
     return (
       <div>
+        <h1>Blog App</h1>
         <h2>Please Log In</h2>
         {message.text && <Message {...message} />}
         <form onSubmit={handleLogin}>
           <div>
             username
             <input
+              data-testid="username"
               type="text"
               value={username}
               name="Username"
+              placeholder="username"
               onChange={({ target }) => setUsername(target.value)}
             />
           </div>
           <div>
             password
             <input
+              data-testid="password"
               type="password"
               value={password}
               name="Password"
+              placeholder="password"
               onChange={({ target }) => setPassword(target.value)}
             />
           </div>
@@ -126,7 +131,7 @@ const App = () => {
   }
   return (
     <div>
-      <h2>blogs</h2>
+      <h1>Blog App</h1>
       <h4>
         Logged in as {user.name} <button onClick={handleLogout}>Log out</button>
       </h4>
