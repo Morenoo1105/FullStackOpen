@@ -24,6 +24,7 @@ const PostBlog = ({ handleBlogPost }) => {
             value={title}
             name="Title"
             placeholder="title"
+            data-testid="title"
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
@@ -34,6 +35,7 @@ const PostBlog = ({ handleBlogPost }) => {
             value={author}
             name="Author"
             placeholder="author"
+            data-testid="author"
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
@@ -44,6 +46,7 @@ const PostBlog = ({ handleBlogPost }) => {
             value={url}
             name="Url"
             placeholder="url"
+            data-testid="url"
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>

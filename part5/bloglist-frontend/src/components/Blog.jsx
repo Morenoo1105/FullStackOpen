@@ -5,18 +5,17 @@ const Blog = ({ blog, handleLike, handleDelete }) => {
 
   if (!isVisible) {
     return (
-      <div>
-        <div>
-          <button id="view" onClick={() => setVisible(true)}>
-            View
-          </button>
-          &quot;{blog.title}&quot; by {blog.author}
-        </div>
+      <div className="blogListItem">
+        <button id="view" onClick={() => setVisible(true)}>
+          View
+        </button>
+        &quot;{blog.title}&quot; by {blog.author}
       </div>
     );
   }
   return (
     <div
+      className="blogInfoItem"
       style={{
         borderColor: "#f9f",
         borderWidth: 2,

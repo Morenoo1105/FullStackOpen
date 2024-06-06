@@ -59,4 +59,36 @@ describe("Blog app", () => {
       ).not.toBeVisible();
     });
   });
+
+  describe("When logged in", () => {
+    beforeEach(async ({ page }) => {
+      await page.getByTestId("username").fill("root");
+      await page.getByTestId("password").fill("password");
+      await page.getByRole("button", { name: "login" }).click();
+    });
+
+    test.only("a new blog can be created", async ({ page }) => {
+      const title = "Test Title";
+      const author = "Test Author";
+      const url = "http://test.com";
+
+      await page.getByRole("button", { name: "New Blog" }).click();
+
+      await page.getByTestId("title").fill(title);
+      await page.getByTestId("author").fill(author);
+      await page.getByTestId("url").fill(url);
+
+      await page.getByRole("button", { name: "Create" }).click();
+
+      await page.waitForTimeout(1000);
+
+      await expect(
+        page.getByText(`A new blog ${title} by ${author} added`)
+      ).toBeVisible();
+
+      const listItem = page.locator(".blogListItem").last();
+
+      await expect(listItem).toBeVisible();
+    });
+  });
 });
