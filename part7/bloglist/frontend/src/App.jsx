@@ -1,8 +1,5 @@
-import { useState, useEffect, createRef } from "react";
+import { useEffect, createRef } from "react";
 
-import blogService from "./services/blogs";
-import loginService from "./services/login";
-import storage from "./services/storage";
 import Login from "./components/Login";
 import Blog from "./components/Blog";
 import NewBlog from "./components/NewBlog";
@@ -16,6 +13,7 @@ import {
   removeBlog,
   upVoteBlog,
 } from "./reducers/blogReducer";
+import { initializeUser, logUser, logoutUser } from "./reducers/userReducer";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -25,14 +23,10 @@ const App = () => {
     dispatch(initializeBlogs());
   }, []);
 
-  // const [blogs, setBlogs] = useState([]);
-  const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    const user = storage.loadUser();
-    if (user) {
-      setUser(user);
-    }
+    dispatch(initializeUser());
   }, []);
 
   const blogFormRef = createRef();
@@ -43,13 +37,18 @@ const App = () => {
 
   const handleLogin = async (credentials) => {
     try {
-      const user = await loginService.login(credentials);
-      setUser(user);
-      storage.saveUser(user);
-      notify(`Welcome back, ${user.name}`);
+      dispatch(logUser(credentials));
+
+      notify(`Welcome back!`);
     } catch (error) {
+      console.log("error: ", error);
       notify("Wrong credentials", "error");
     }
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    notify(`Bye, ${user.name}!`);
   };
 
   const handleCreate = async (blog) => {
@@ -69,17 +68,9 @@ const App = () => {
     notify(`You liked ${blog.title} by ${blog.author}`);
   };
 
-  const handleLogout = () => {
-    setUser(null);
-    storage.removeUser();
-    notify(`Bye, ${user.name}!`);
-  };
-
   const handleDelete = async (blog) => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
       dispatch(removeBlog(blog.id));
-      // await blogService.remove(blog.id);
-      // setBlogs(blogs.filter((b) => b.id !== blog.id));
       notify(`Blog ${blog.title}, by ${blog.author} removed`);
     }
   };
