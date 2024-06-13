@@ -8,17 +8,24 @@ import Blog from "./components/Blog";
 import NewBlog from "./components/NewBlog";
 import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "./reducers/notificationReducer";
+import {
+  createBlog,
+  initializeBlogs,
+  upVoteBlog,
+} from "./reducers/blogReducer";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [user, setUser] = useState(null);
   const dispatch = useDispatch();
 
+  const blogs = useSelector((state) => state.blogs);
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    dispatch(initializeBlogs());
   }, []);
+
+  // const [blogs, setBlogs] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const user = storage.loadUser();
@@ -45,21 +52,20 @@ const App = () => {
   };
 
   const handleCreate = async (blog) => {
-    const newBlog = await blogService.create(blog);
-    setBlogs(blogs.concat(newBlog));
-    notify(`Blog created: ${newBlog.title}, ${newBlog.author}`);
+    dispatch(createBlog(blog));
+    notify(`Blog created: ${blog.title}, ${blog.author}`);
     blogFormRef.current.toggleVisibility();
   };
 
   const handleVote = async (blog) => {
-    console.log("updating", blog);
-    const updatedBlog = await blogService.update(blog.id, {
-      ...blog,
-      likes: blog.likes + 1,
-    });
+    dispatch(
+      upVoteBlog(blog.id, {
+        ...blog,
+        likes: blog.likes + 1,
+      })
+    );
 
-    notify(`You liked ${updatedBlog.title} by ${updatedBlog.author}`);
-    setBlogs(blogs.map((b) => (b.id === blog.id ? updatedBlog : b)));
+    notify(`You liked ${blog.title} by ${blog.author}`);
   };
 
   const handleLogout = () => {
@@ -71,7 +77,7 @@ const App = () => {
   const handleDelete = async (blog) => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
       await blogService.remove(blog.id);
-      setBlogs(blogs.filter((b) => b.id !== blog.id));
+      // setBlogs(blogs.filter((b) => b.id !== blog.id));
       notify(`Blog ${blog.title}, by ${blog.author} removed`);
     }
   };
@@ -99,7 +105,7 @@ const App = () => {
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <NewBlog doCreate={handleCreate} />
       </Togglable>
-      {blogs.sort(byLikes).map((blog) => (
+      {[...blogs].sort(byLikes).map((blog) => (
         <Blog
           key={blog.id}
           blog={blog}
