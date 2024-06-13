@@ -13,6 +13,7 @@ import { setNotification } from "./reducers/notificationReducer";
 import {
   createBlog,
   initializeBlogs,
+  removeBlog,
   upVoteBlog,
 } from "./reducers/blogReducer";
 
@@ -76,7 +77,8 @@ const App = () => {
 
   const handleDelete = async (blog) => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      await blogService.remove(blog.id);
+      dispatch(removeBlog(blog.id));
+      // await blogService.remove(blog.id);
       // setBlogs(blogs.filter((b) => b.id !== blog.id));
       notify(`Blog ${blog.title}, by ${blog.author} removed`);
     }
