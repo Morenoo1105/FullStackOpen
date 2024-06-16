@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const NewBlog = ({ doCreate }) => {
+const NewBlog = ({ doCreate, notify }) => {
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [author, setAuthor] = useState("");
@@ -19,10 +19,14 @@ const NewBlog = ({ doCreate }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (author.length === 0 || url.length === 0 || title.length === 0)
+      return notify("Please fill every field", "error");
+
     doCreate({ title, url, author });
-    setAuthor("");
     setTitle("");
     setUrl("");
+    setAuthor("");
   };
 
   return (

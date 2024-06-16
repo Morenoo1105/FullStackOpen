@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import blogService from "../services/blogs";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { removeBlog, upVoteBlog } from "../reducers/blogReducer";
 import storage from "../services/storage";
+import { createComment, initializeComments } from "../reducers/commentsReducer";
 
 const SingleBlogView = ({ notify }) => {
   const { id } = useParams();
@@ -18,7 +19,9 @@ const SingleBlogView = ({ notify }) => {
       .then((blog) => {
         setBlog(blog);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.log("error: ", error);
+      });
   }, [id]);
 
   const likeBlog = async () => {
@@ -42,6 +45,29 @@ const SingleBlogView = ({ notify }) => {
       dispatch(removeBlog(blog.id));
       notify(`Blog ${blog.title}, by ${blog.author} removed`);
       navigate("/");
+    }
+  };
+
+  const [commentText, setCommentText] = useState("");
+
+  const comments = useSelector((state) => state.comments);
+
+  useEffect(() => {
+    dispatch(initializeComments(id));
+  }, [dispatch, id]);
+
+  const handleCreateComment = async (event) => {
+    event.preventDefault();
+    try {
+      if (commentText.length === 0)
+        return notify("Comment cannot be empty", "error");
+
+      dispatch(createComment(id, commentText));
+      notify(`Comment added successfully!`);
+      setCommentText("");
+    } catch (error) {
+      console.log("error: ", error);
+      notify(`Error adding comment: ${error.response.data.error}`, "error");
     }
   };
 
@@ -87,6 +113,37 @@ const SingleBlogView = ({ notify }) => {
           </button>
         </li>
       </ul>
+      <div>
+        <h4 className="text-lg mb-2 font-medium text-emerald-400 underline-offset-4 decoration-2">
+          Comments
+        </h4>
+        <div className="flex flex-row mb-4 w-full">
+          <input
+            className="border-2 border-emerald-400 rounded-l-full pl-4 pr-2 py-1 w-full"
+            type="text"
+            value={commentText}
+            onChange={({ target }) => setCommentText(target.value)}
+          />
+          <button
+            className="rounded-r-full font-bold hover:opacity-75 bg-emerald-400 pl-3 pr-4 py-1"
+            onClick={handleCreateComment}
+          >
+            Comment
+          </button>
+        </div>
+        {comments.length > 0 && (
+          <ul className="rounded-xl border-2 border-emerald-400 px-4 py-2 w-full">
+            {[...comments].reverse().map((comment, index) => (
+              <li className="w-full" key={index}>
+                <span>{comment.content}</span>
+                {index < comments.length - 1 && (
+                  <div className="w-[90%] mx-auto h-px bg-emerald-400/50 my-2" />
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };

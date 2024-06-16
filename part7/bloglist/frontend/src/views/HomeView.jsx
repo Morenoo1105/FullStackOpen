@@ -26,7 +26,7 @@ const HomeView = ({ notify }) => {
   return (
     <>
       <Togglable buttonLabel="Create New Blog" ref={blogFormRef}>
-        <NewBlog doCreate={handleCreate} />
+        <NewBlog doCreate={handleCreate} notify={notify} />
       </Togglable>
 
       <ul className="rounded-xl border-2 border-emerald-400 w-fit px-4 py-2">

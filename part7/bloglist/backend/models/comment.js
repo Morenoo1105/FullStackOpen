@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const commentSchema = new mongoose.Schema({
+const schema = new mongoose.Schema({
   content: String,
   blog: {
     type: mongoose.Schema.Types.ObjectId,
@@ -8,7 +8,7 @@ const commentSchema = new mongoose.Schema({
   },
 });
 
-commentSchema.set("toJSON", {
+schema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
@@ -16,6 +16,4 @@ commentSchema.set("toJSON", {
   },
 });
 
-const Comment = mongoose.model("Comment", commentSchema);
-
-module.exports = Comment;
+module.exports = mongoose.model("Comment", schema);
