@@ -5,16 +5,13 @@ const Notification = () => {
 
   if (!notification || notification.message === "") return null;
 
-  const style = {
-    backgroundColor: "lightgrey",
-    margin: "10px",
-    padding: "10px",
-    border: "2px solid",
-    borderColor: notification.type === "success" ? "green" : "red",
-    borderRadius: "5px",
-  };
-
-  return <div style={style}>{notification.message}</div>;
+  return (
+    <div
+      className={`${notification.type === "success" ? "bg-emerald-400" : "bg-rose-400"} px-4 py-2 rounded-xl w-full text-white font-bold mb-4`}
+    >
+      {notification.message}
+    </div>
+  );
 };
 
 export default Notification;

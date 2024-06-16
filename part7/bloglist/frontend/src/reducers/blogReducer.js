@@ -6,14 +6,13 @@ const blogSlice = createSlice({
   initialState: [],
   reducers: {
     vote(state, action) {
-      const id = action.payload;
-      const blogToChange = state.find((n) => n.id === id);
-      const changedBlog = {
-        ...blogToChange,
-        likes: blogToChange.likes + 1,
-      };
+      const blogToChange = action.payload;
 
-      return state.map((blog) => (blog.id !== id ? blog : changedBlog));
+      return state
+        ? state.map((blog) =>
+            blog.id !== blogToChange.id ? blog : blogToChange
+          )
+        : state.push(blogToChange);
     },
     appendBlog(state, action) {
       state.push(action.payload);

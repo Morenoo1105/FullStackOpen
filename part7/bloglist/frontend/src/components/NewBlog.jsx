@@ -27,36 +27,49 @@ const NewBlog = ({ doCreate }) => {
 
   return (
     <div>
-      <h2>Create a New Blog</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title:</label>
+      <h2 className="text-xl mb-2 font-bold text-emerald-400 underline underline-offset-4 decoration-2">
+        Creating a New Blog
+      </h2>
+      <form
+        className="flex flex-col items-start max-w-fit"
+        onSubmit={handleSubmit}
+      >
+        <label className="flex flex-col">
+          Title
           <input
+            className="border border-emerald-400 px-2 py-1 mb-2 rounded-xl"
             type="text"
             data-testid="title"
             value={title}
             onChange={handleTitleChange}
           />
-        </div>
-        <div>
-          <label>URL:</label>
+        </label>
+        <label className="flex flex-col">
+          URL
           <input
+            className="border border-emerald-400 px-2 py-1 mb-2 rounded-xl"
             type="text"
             data-testid="url"
             value={url}
             onChange={handleUrlChange}
           />
-        </div>
-        <div>
-          <label>Author:</label>
+        </label>
+        <label className="flex flex-col">
+          Author
           <input
+            className="border border-emerald-400 px-2 py-1 mb-2 rounded-xl"
             type="text"
             data-testid="author"
             value={author}
             onChange={handleAuthorChange}
           />
-        </div>
-        <button type="submit">Create</button>
+        </label>
+        <button
+          className="bg-emerald-400 opacity-100 hover:opacity-75 cursor-pointer rounded-full font-semibold w-full px-5 py-2 mt-4"
+          type="submit"
+        >
+          Create
+        </button>
       </form>
     </div>
   );

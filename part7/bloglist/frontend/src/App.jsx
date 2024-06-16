@@ -1,27 +1,19 @@
-import { useEffect, createRef } from "react";
+import { useEffect } from "react";
 
 import Login from "./components/Login";
-import Blog from "./components/Blog";
-import NewBlog from "./components/NewBlog";
 import Notification from "./components/Notification";
-import Togglable from "./components/Togglable";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "./reducers/notificationReducer";
-import {
-  createBlog,
-  initializeBlogs,
-  removeBlog,
-  upVoteBlog,
-} from "./reducers/blogReducer";
-import { initializeUser, logUser, logoutUser } from "./reducers/userReducer";
+import { initializeUser, logUser } from "./reducers/userReducer";
+import { Route, Routes } from "react-router-dom";
+import HomeView from "./views/HomeView";
+import UsersView from "./views/UsersView";
+import SingleUserView from "./views/SingleUserView";
+import SingleBlogView from "./views/SingleBlogView";
+import NavBar from "./components/NavBar";
 
 const App = () => {
   const dispatch = useDispatch();
-
-  const blogs = useSelector((state) => state.blogs);
-  useEffect(() => {
-    dispatch(initializeBlogs());
-  }, []);
 
   const user = useSelector((state) => state.user);
 
@@ -29,84 +21,46 @@ const App = () => {
     dispatch(initializeUser());
   }, []);
 
-  const blogFormRef = createRef();
-
   const notify = (message, type = "success") => {
     dispatch(setNotification({ message, type }, 5000));
   };
 
-  const handleLogin = async (credentials) => {
-    try {
-      dispatch(logUser(credentials));
-
-      notify(`Welcome back!`);
-    } catch (error) {
+  const handleLogin = (credentials) => {
+    dispatch(logUser(credentials)).catch((error) => {
       console.log("error: ", error);
-      notify("Wrong credentials", "error");
-    }
-  };
-
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    notify(`Bye, ${user.name}!`);
-  };
-
-  const handleCreate = async (blog) => {
-    dispatch(createBlog(blog));
-    notify(`Blog created: ${blog.title}, ${blog.author}`);
-    blogFormRef.current.toggleVisibility();
-  };
-
-  const handleVote = async (blog) => {
-    dispatch(
-      upVoteBlog(blog.id, {
-        ...blog,
-        likes: blog.likes + 1,
-      })
-    );
-
-    notify(`You liked ${blog.title} by ${blog.author}`);
-  };
-
-  const handleDelete = async (blog) => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      dispatch(removeBlog(blog.id));
-      notify(`Blog ${blog.title}, by ${blog.author} removed`);
-    }
+      notify(error.response.data.error, "error");
+    });
+    notify(`Welcome back!`);
   };
 
   if (!user) {
     return (
-      <div>
-        <h2>blogs</h2>
+      <div className="container mx-auto">
+        <h2 className="text-3xl font-bold font-serif my-4">BLOGS</h2>
         <Notification />
         <Login doLogin={handleLogin} />
       </div>
     );
   }
 
-  const byLikes = (a, b) => b.likes - a.likes;
-
   return (
-    <div>
-      <h2>blogs</h2>
-      <Notification />
-      <div>
-        {user.name} logged in
-        <button onClick={handleLogout}>logout</button>
+    <>
+      <NavBar notify={notify} />
+      <div className="container mx-auto">
+        <h2 className="text-3xl font-bold font-serif my-4">BLOGS</h2>
+        <Notification />
+
+        <Routes>
+          <Route path="/" element={<HomeView notify={notify} />} />
+          <Route
+            path="/blogs/:id"
+            element={<SingleBlogView notify={notify} />}
+          />
+          <Route path="/users" element={<UsersView />} />
+          <Route path="/users/:id" element={<SingleUserView />} />
+        </Routes>
       </div>
-      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-        <NewBlog doCreate={handleCreate} />
-      </Togglable>
-      {[...blogs].sort(byLikes).map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleVote={handleVote}
-          handleDelete={handleDelete}
-        />
-      ))}
-    </div>
+    </>
   );
 };
 
