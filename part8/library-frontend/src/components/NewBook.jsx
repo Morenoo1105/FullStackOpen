@@ -17,7 +17,9 @@ const CREATE_BOOK = gql`
       genres: $genres
     ) {
       title
-      author
+      author {
+        name
+      }
       published
       genres
     }
@@ -44,7 +46,11 @@ const NewBook = (props) => {
 
     createBook({
       variables: { title, author, published: parseInt(published), genres },
+    }).catch((error) => {
+      console.log(error);
     });
+
+    props.setPage("books");
 
     setTitle("");
     setPublished("");
@@ -60,6 +66,7 @@ const NewBook = (props) => {
 
   return (
     <div>
+      <h2>add book</h2>
       <form onSubmit={submit}>
         <div>
           title
