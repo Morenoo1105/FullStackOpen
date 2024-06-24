@@ -8,26 +8,10 @@ interface Result {
   average: number;
 }
 
-interface Values {
-  target: number;
-  exercises: number[];
-}
-
-const parseArguments = (args: string[]): Values => {
-  if (args.length < 2) throw new Error("Not enough arguments");
-  if (args.length > 12) throw new Error("Too many arguments");
-
-  if (args.slice(2).every((ar) => !isNaN(Number(ar)))) {
-    return {
-      target: Number(args[2]),
-      exercises: args.map((ar) => Number(ar)).slice(3),
-    };
-  } else {
-    throw new Error("Provided values were not numbers!");
-  }
-};
-
-const calculateExercises = (target: number, exercises: number[]): Result => {
+export const calculateExercises = (
+  target: number,
+  exercises: number[]
+): Result => {
   const periodLength = exercises.length;
   const trainingDays = exercises.filter((e) => e > 0).length;
   const average = exercises.reduce((a, b) => a + b, 0) / periodLength;
@@ -50,12 +34,3 @@ const calculateExercises = (target: number, exercises: number[]): Result => {
     average,
   };
 };
-
-try {
-  const { target, exercises } = parseArguments(process.argv);
-  console.log(calculateExercises(target, exercises));
-} catch (error) {
-  console.log("Error, something bad happened, message: ", error.message);
-}
-
-export {};
