@@ -30,53 +30,42 @@ export const ALL_BOOKS_WITH_GENRE = gql`
 
 const Books = (props) => {
   const [genres, setGenres] = useState([]);
+  const initialBooks = useQuery(ALL_BOOKS);
 
-  const [filter, setFilter] = useState("");
-
-  const [books, setBooks] = useState([]);
-  // const books = useQuery(ALL_BOOKS);
   const [getBooks, result] = useLazyQuery(ALL_BOOKS_WITH_GENRE);
+
+  const [bookList, setBookList] = useState([]);
+
+  const changeGenre = (event) => {
+    event.preventDefault();
+    getBooks({ variables: { genre: event.target.value } });
+  };
 
   useEffect(() => {
     if (result.data) {
-      setBooks(result.data.allBooks);
+      setBookList(result.data.allBooks);
     }
-
-
-
-  }, [books]);
+  }, [result]);
 
   useEffect(() => {
-    // getBooks().then((res) => {
-    //   const genres = res.data.allBooks
-    //     .map((book) => book.genres)
-    //     .flat()
-    //     .filter((genre, idx, arr) => arr.indexOf(genre) === idx)
-    //     .sort();
-
-    //   setGenres(genres);
-    // });
-
-    // if (books.data) {
-    //   const genres = books
-    //     .map((book) => book.genres)
-    //     .flat()
-    //     .filter((genre, idx, arr) => arr.indexOf(genre) === idx)
-    //     .sort();
-
-    //   setGenres(genres);
-    // }
-  }, []);
+    if (initialBooks.data) {
+      const genres = initialBooks.data.allBooks
+        .map((book) => book.genres)
+        .flat()
+        .filter((genre, idx, arr) => arr.indexOf(genre) === idx)
+        .sort();
+      setGenres(genres);
+      setBookList(initialBooks.data.allBooks);
+    }
+  }, [initialBooks.data]);
 
   useEffect(() => {
-    if (filter) {
-      getBooks({ variables: { genre: filter } });
-    }
-  }, [filter]);
+    if (props.show) getBooks({ variables: { genre: "" } });
+  }, [props.show]);
 
   if (!props.show) return null;
 
-  if (books.loading) return <div>Loading books...</div>;
+  if (initialBooks.loading) return <div>Loading books...</div>;
 
   return (
     <div>
@@ -84,9 +73,9 @@ const Books = (props) => {
       <div>
         <b>Genre:</b>
         <select
-          style={{ marginLeft: 6, textTransform: "capitalize" }}
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
+          style={{ marginLeft: 6, marginRight: 6, textTransform: "capitalize" }}
+          defaultValue={""}
+          onChange={changeGenre}
         >
           <option value="">All</option>
           {genres.map((genre) => (
@@ -95,6 +84,11 @@ const Books = (props) => {
             </option>
           ))}
         </select>
+        {result.loading && (
+          <span>
+            <b>Loading books...</b>
+          </span>
+        )}
       </div>
 
       <table>
@@ -104,7 +98,7 @@ const Books = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {books.data.allBooks.map((a) => (
+          {bookList.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
