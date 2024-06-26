@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { apiBaseUrl } from "../../constants";
 
-import { Patient } from "../../types";
+import { Diagnosis, Patient } from "../../types";
 import { useParams } from "react-router-dom";
+import EntryDetails from "./EntryDetails";
 
-const PatientPage = () => {
+interface Props {
+  diagnosis: Diagnosis[];
+}
+
+const PatientPage = ({ diagnosis }: Props) => {
   const { id } = useParams<{ id: string }>();
 
   const [patientInfo, setPatientInfo] = useState<Patient>();
@@ -36,16 +41,31 @@ const PatientPage = () => {
       </div>
       <h3>Entries:</h3>
       {patientInfo.entries.map((entry) => (
-        <div key={entry.id}>
-          <p>
-            {entry.date} <i>{entry.description}</i>
-          </p>
-          <ul>
-            {entry.diagnosisCodes?.map((code) => (
-              <li key={code}>{code}</li>
-            ))}
-          </ul>
+        <div
+          key={entry.id}
+          style={{
+            border: "1px solid black",
+            borderRadius: 14,
+            padding: 4,
+            paddingLeft: 20,
+          }}
+        >
+          <EntryDetails entry={entry} diagnosis={diagnosis} />
         </div>
+        // <div key={entry.id}>
+        //   <p>
+        //     {entry.date} <i>{entry.description}</i>
+        //   </p>
+        //   <ul>
+        //     {entry.diagnosisCodes?.map((code: Diagnosis["code"]) => (
+        //       <li key={code}>
+        //         {code} -{" "}
+        //         {diagnosis.length > 0 &&
+        //           diagnosis.filter((d) => d.code === code)[0].name}
+        //       </li>
+        //     ))}
+        //   </ul>
+        // </div>
       ))}
     </div>
   );
