@@ -5,7 +5,6 @@ import {
   WorkRounded,
 } from "@mui/icons-material";
 import {
-  Diagnosis,
   Entry,
   HealthCheckEntry,
   HospitalEntry,
@@ -78,13 +77,7 @@ const OccupationalHealthcareEntryComponent = ({
   );
 };
 
-const EntryDetails = ({
-  entry,
-  diagnosis,
-}: {
-  entry: Entry;
-  diagnosis: Diagnosis[];
-}) => {
+const EntryDetails = ({ entry }: { entry: Entry }) => {
   const assertNever = (value: never): never => {
     throw new Error(
       `Unhandled discriminated union member: ${JSON.stringify(value)}`
