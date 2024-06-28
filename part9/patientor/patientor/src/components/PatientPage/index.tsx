@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { apiBaseUrl } from "../../constants";
 
-import { Diagnosis, Patient } from "../../types";
+import { Diagnosis, Entry, EntryWithoutId, Patient } from "../../types";
 import { useParams } from "react-router-dom";
 import EntryDetails from "./EntryDetails";
 import AddEntryModal from "../AddEntryModal";
 import { Button } from "@mui/material";
+import patientService from "../../services/patients";
 
 interface Props {
   diagnosis: Diagnosis[];
@@ -14,21 +15,53 @@ interface Props {
 
 const PatientPage = ({ diagnosis }: Props) => {
   const { id } = useParams<{ id: string }>();
+  const [patientInfo, setPatientInfo] = useState<Patient>();
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>();
+  const [openingModal, setOpeningModal] =
+    useState<Entry["type"]>("HealthCheck");
 
-  const openModal = (): void => setModalOpen(true);
+  const openModal = (opening: Entry["type"]): void => {
+    setModalOpen(true);
+    setOpeningModal(opening);
+  };
+
   const closeModal = (): void => {
     setModalOpen(false);
     setError(undefined);
   };
 
-  const submitNewEntry = async () => {
+  const submitNewEntry = async (value: EntryWithoutId) => {
+    try {
+      if (patientInfo) {
+        const entry = await patientService.addEntry(patientInfo.id, value);
+        setPatientInfo({
+          ...patientInfo,
+          entries: patientInfo.entries.concat(entry),
+        });
+        setModalOpen(false);
+      }
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        if (e?.response?.data && typeof e?.response?.data === "string") {
+          const message = e.response.data.replace(
+            "Something went wrong. Error: ",
+            ""
+          );
+          console.error(message);
+          setError(message);
+        } else {
+          setError("Unrecognized axios error");
+        }
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
+    }
+
     console.log("submitting new entry");
   };
-
-  const [patientInfo, setPatientInfo] = useState<Patient>();
 
   useEffect(() => {
     axios
@@ -86,14 +119,27 @@ const PatientPage = ({ diagnosis }: Props) => {
         ))}
       </div>
       <AddEntryModal
+        diagnosis={diagnosis}
         modalOpen={modalOpen}
         onSubmit={submitNewEntry}
         error={error}
         onClose={closeModal}
+        type={openingModal}
       />
-      <Button variant="contained" onClick={() => openModal()}>
-        Add New Entry
-      </Button>
+      <div style={{ display: "flex", gap: 12 }}>
+        <Button variant="contained" onClick={() => openModal("HealthCheck")}>
+          + Health Check
+        </Button>
+        <Button variant="contained" onClick={() => openModal("Hospital")}>
+          + Hospital
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => openModal("OccupationalHealthcare")}
+        >
+          + Occupational Healthcare
+        </Button>
+      </div>
     </div>
   );
 };

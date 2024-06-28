@@ -99,7 +99,7 @@ const parseHealthCheckRating = (
   healthCheckRating: unknown
 ): HealthCheckRating => {
   if (
-    !healthCheckRating ||
+    (!healthCheckRating && healthCheckRating !== 0) ||
     !isNumber(healthCheckRating) ||
     !isHealthCheckRating(healthCheckRating)
   ) {
@@ -122,12 +122,12 @@ const parseSickLeave = (object: unknown): SickLeave => {
     };
     return sickLeave;
   }
-  throw new Error("Incorrect data: a field missing");
+  throw new Error("Incorrect data: start or end date of sick leave missing");
 };
 
 const parseEmployerName = (employerName: unknown): string => {
   if (!employerName || !isString(employerName)) {
-    throw new Error("Incorrect ot missing description");
+    throw new Error("Incorrect ot missing Employer name");
   }
   return employerName;
 };
@@ -207,7 +207,7 @@ const toNewDiagnoseEntry = (object: unknown): EntryWithoutId => {
                     type: "OccupationalHealthcare",
                     employerName: parseEmployerName(object.employerName),
 
-                    sickLeave: parseSickLeave(object),
+                    sickLeave: parseSickLeave(object.sickLeave),
                   }
                 : {
                     ...newBaseEntry,

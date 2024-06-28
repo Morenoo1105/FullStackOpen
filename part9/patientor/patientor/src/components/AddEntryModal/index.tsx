@@ -6,23 +6,62 @@ import {
   Alert,
 } from "@mui/material";
 
-import AddEntryForm from "./AddEntryForm";
-import { PatientFormValues } from "../../types";
+import HealthCheckForm from "./HealthCheckForm";
+import { Diagnosis, Entry, NewEntryFormValues } from "../../types";
+import HospitalForm from "./HospitalForm";
+import OccupationalForm from "./OccupationalForm";
 
 interface Props {
+  diagnosis: Diagnosis[];
   modalOpen: boolean;
   onClose: () => void;
-  onSubmit: (values: PatientFormValues) => void;
+  onSubmit: (values: NewEntryFormValues) => void;
   error?: string;
+  type: Entry["type"];
 }
 
-const AddEntryModal = ({ modalOpen, onClose, onSubmit, error }: Props) => (
+const AddEntryModal = ({
+  diagnosis,
+  modalOpen,
+  onClose,
+  onSubmit,
+  error,
+  type,
+}: Props) => (
   <Dialog fullWidth={true} open={modalOpen} onClose={() => onClose()}>
-    <DialogTitle>Add a new patient</DialogTitle>
+    <DialogTitle>
+      Add a new{" "}
+      {type === "HealthCheck"
+        ? "Health Check"
+        : type === "Hospital"
+        ? "Hospital"
+        : "Occupational Healthcare"}{" "}
+      entry
+    </DialogTitle>
     <Divider />
     <DialogContent>
       {error && <Alert severity="error">{error}</Alert>}
-      <AddEntryForm onSubmit={onSubmit} onCancel={onClose} />
+      {type === "HealthCheck" && (
+        <HealthCheckForm
+          diagnosis={diagnosis}
+          onSubmit={onSubmit}
+          onCancel={onClose}
+        />
+      )}
+      {type === "Hospital" && (
+        <HospitalForm
+          diagnosis={diagnosis}
+          onSubmit={onSubmit}
+          onCancel={onClose}
+        />
+      )}
+      {type === "OccupationalHealthcare" && (
+        <OccupationalForm
+          diagnosis={diagnosis}
+          onSubmit={onSubmit}
+          onCancel={onClose}
+        />
+      )}
     </DialogContent>
   </Dialog>
 );
