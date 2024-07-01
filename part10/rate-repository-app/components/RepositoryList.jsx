@@ -59,6 +59,7 @@ const ItemSeparator = () => <View style={styles.separator} />;
 const RepositoryList = () => {
   return (
     <FlatList
+      style={{ width: "100%" }}
       data={repositories}
       ItemSeparatorComponent={ItemSeparator}
       renderItem={RepositoryItem}
