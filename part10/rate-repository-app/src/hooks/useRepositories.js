@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
+
 import { GET_REPOSITORIES } from "../graphql/queries";
 
 const useRepositories = () => {
@@ -10,7 +11,7 @@ const useRepositories = () => {
 
   useEffect(() => {
     if (data) setRepositories(data.repositories);
-  }, []);
+  }, [loading]);
 
   return { repositories, loading };
 };

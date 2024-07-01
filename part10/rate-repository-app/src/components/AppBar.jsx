@@ -3,6 +3,8 @@ import Constants from "expo-constants";
 import theme from "../theme";
 import AppBarTab from "./AppBarTab";
 
+import useIsSignedIn from "../hooks/useIsSignedIn";
+
 const styles = StyleSheet.create({
   container: {
     paddingTop: Constants.statusBarHeight,
@@ -17,11 +19,17 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
+  const { user } = useIsSignedIn();
+
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
         <AppBarTab text={"Repositories"} route={"/"} />
-        <AppBarTab text={"Sign In"} route={"/signin"} />
+        {user ? (
+          <AppBarTab text={"Sign Out"} route={"/signout"} />
+        ) : (
+          <AppBarTab text={"Sign In"} route={"/signin"} />
+        )}
       </ScrollView>
     </View>
   );
