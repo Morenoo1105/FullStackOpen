@@ -1,6 +1,7 @@
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Image, StyleSheet } from "react-native";
 import React from "react";
 import theme from "../theme";
+import Text from "./Text";
 
 const styles = StyleSheet.create({
   container: {
@@ -22,8 +23,6 @@ const styles = StyleSheet.create({
   },
   mainText: {
     color: theme.colors.textPrimary,
-    fontWeight: "bold",
-    fontSize: 16,
     lineHeight: 32,
   },
   secondaryText: {
@@ -54,10 +53,12 @@ const styles = StyleSheet.create({
 const UnderItem = ({ value, text }) => {
   return (
     <View style={styles.underItem}>
-      <Text style={styles.mainText}>
+      <Text style={styles.mainText} fontWeight="bold" fontSize="subheading">
         {value >= 1000 ? parseFloat((value / 1000).toFixed(1)) + "k" : value}
       </Text>
-      <Text style={styles.secondaryText}>{text}</Text>
+      <Text style={styles.secondaryText} fontWeight="normal" fontSize="body">
+        {text}
+      </Text>
     </View>
   );
 };
@@ -85,9 +86,19 @@ const RepositoryItem = ({ item }) => {
           />
         </View>
         <View style={{ flex: 1, alignItems: "flex-start" }}>
-          <Text style={styles.mainText}>{fullName}</Text>
-          <Text style={styles.secondaryText}>{description}</Text>
-          <Text style={styles.boxedText}>{language}</Text>
+          <Text style={styles.mainText} fontWeight="bold" fontSize="subheading">
+            {fullName}
+          </Text>
+          <Text
+            style={styles.secondaryText}
+            fontWeight="normal"
+            fontSize="body"
+          >
+            {description}
+          </Text>
+          <Text style={styles.boxedText} fontWeight="bold" fontSize="body">
+            {language}
+          </Text>
         </View>
       </View>
       <View style={styles.underItems}>

@@ -3,12 +3,12 @@ import {
   TextInput,
   StyleSheet,
   Button,
-  Text,
   View,
 } from "react-native";
 import theme from "../theme";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import Text from "./Text";
 
 const styles = StyleSheet.create({
   container: {
