@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
-import { IS_SIGNED_IN } from "../graphql/queries";
+import { GET_CURRENT_USER } from "../graphql/queries";
 
-const useIsSignedIn = () => {
+const useIsSignedIn = (reviews = false) => {
   const [user, setUser] = useState();
-  const { data } = useQuery(IS_SIGNED_IN, {
+
+  const { data, refetch } = useQuery(GET_CURRENT_USER, {
     fetchPolicy: "cache-and-network",
+    variables: { includeReviews: reviews },
   });
 
   useEffect(() => {
     if (data) setUser(data.me);
   }, [data]);
 
-  return { user };
+  return { user, refetch };
 };
 
 export default useIsSignedIn;

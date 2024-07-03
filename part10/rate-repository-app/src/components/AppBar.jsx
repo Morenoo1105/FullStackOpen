@@ -28,6 +28,7 @@ const AppBar = () => {
         {user ? (
           <>
             <AppBarTab text={"Write a review"} route={"/writeReview"} />
+            <AppBarTab text={"My reviews"} route={"/myReviews"} />
             <AppBarTab text={"Sign Out"} route={"/signout"} />
           </>
         ) : (

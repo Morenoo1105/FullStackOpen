@@ -39,11 +39,19 @@ export const GET_SINGLE_REPO = gql`
   }
 `;
 
-export const IS_SIGNED_IN = gql`
-  query {
+export const GET_CURRENT_USER = gql`
+  ${REVIEW_DETAILS}
+  query getCurrentUser($includeReviews: Boolean = false) {
     me {
       id
       username
+      reviews @include(if: $includeReviews) {
+        edges {
+          node {
+            ...ReviewDetails
+          }
+        }
+      }
     }
   }
 `;

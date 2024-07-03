@@ -18,6 +18,7 @@ const RepositoryListHeader = ({
   return (
     <View>
       <Searchbar
+        style={{ backgroundColor: "white", borderRadius: 5, margin: 10 }}
         placeholder="Search"
         value={searchFilter}
         onChangeText={setSearchFilter}
