@@ -7,32 +7,49 @@ export const GET_REPOSITORIES = gql`
     $orderBy: AllRepositoriesOrderBy
     $orderDirection: OrderDirection
     $searchKeyword: String
+    $after: String
+    $first: Int
   ) {
     repositories(
       orderBy: $orderBy
       orderDirection: $orderDirection
       searchKeyword: $searchKeyword
+      after: $after
+      first: $first
     ) {
       edges {
         node {
           ...RepoDetails
         }
+        cursor
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        startCursor
       }
     }
   }
 `;
 
 export const GET_SINGLE_REPO = gql`
-  ${REPO_DETAILS}, ${REVIEW_DETAILS}
-  query GetRepoUrl($id: ID!) {
+  ${REPO_DETAILS}
+  ${REVIEW_DETAILS}
+  query GetRepoUrl($id: ID!, $first: Int, $after: String) {
     repository(id: $id) {
       ...RepoDetails
       url
-      reviews {
+      reviews(first: $first, after: $after) {
         edges {
           node {
             ...ReviewDetails
           }
+          cursor
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+          startCursor
         }
       }
     }

@@ -10,33 +10,36 @@ const ItemSeparator = () => <View style={{ height: 10 }} />;
 const SingleRepository = () => {
   const { id } = useParams();
 
-  const { repo } = useSingleRepo(id);
+  const { repository, fetchMore } = useSingleRepo(id, 3);
 
-  if (!repo)
+  const onEndReach = () => {
+    fetchMore();
+  };
+
+  if (!repository)
     return (
       <View>
         <Text>Loading...</Text>
       </View>
     );
 
-  const reviewNodes = repo.reviews
-    ? repo.reviews.edges.map((edge) => edge.node)
+  const reviewNodes = repository.reviews
+    ? repository.reviews.edges.map((edge) => edge.node)
     : [];
 
   return (
     <FlatList
-      data={reviewNodes.sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      )}
+      data={reviewNodes}
       renderItem={ReviewItem}
       keyExtractor={({ id }) => id}
       ItemSeparatorComponent={ItemSeparator}
       ListHeaderComponent={() => (
         <>
-          <RepositoryItem item={repo} />
+          <RepositoryItem item={repository} />
           <ItemSeparator />
         </>
       )}
+      onEndReached={onEndReach}
     />
   );
 };

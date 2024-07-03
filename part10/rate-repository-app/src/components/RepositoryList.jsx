@@ -66,6 +66,7 @@ export class RepositoryListContainer extends Component {
             <RepositoryItem item={item} />
           </Pressable>
         )}
+        onEndReached={props.onEndReach}
       />
     );
   }
@@ -111,7 +112,15 @@ const RepositoryList = () => {
   const [searchFilter, setSearchFilter] = useState("");
   const [searchTerm] = useDebounce(searchFilter, 500);
 
-  const { repositories } = useRepositories(selectedOrder, searchTerm);
+  const { repositories, fetchMore } = useRepositories(
+    selectedOrder,
+    searchTerm,
+    4
+  );
+
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   return (
     <RepositoryListContainer
@@ -121,6 +130,7 @@ const RepositoryList = () => {
       setSelectedOrder={setSelectedOrder}
       searchFilter={searchFilter}
       setSearchFilter={setSearchFilter}
+      onEndReach={onEndReach}
     />
   );
 };
