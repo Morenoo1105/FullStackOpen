@@ -1,0 +1,23 @@
+Script started on 2024-07-08 13:24:11+02:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="230" LINES="70"]
+[?2004h]0;moreno@Torre-de-Moreno: /mnt/d/Files/Programacion/FullStackOpen/part12/part12-containers-applications/script-answers[01;32mmoreno@Torre-de-Moreno[00m:[01;34m/mnt/d/Files/Programacion/FullStackOpen/part12/part12-containers-applications/script-answers[00m$ docker run container run -it ubuntu bash[1P[1P[1P[1P[1P[1@ [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
+[?2004l[?2004h]0;root@808144b432cf: /root@808144b432cf:/# ls
+[?2004l[0m[01;36mbin[0m  [01;34mboot[0m  [01;34mdev[0m  [01;34metc[0m  [01;34mhome[0m  [01;36mlib[0m  [01;36mlib64[0m  [01;34mmedia[0m  [01;34mmnt[0m  [01;34mopt[0m  [01;34mproc[0m  [01;34mroot[0m  [01;34mrun[0m  [01;36msbin[0m  [01;34msrv[0m  [01;34msys[0m  [30;42mtmp[0m  [01;34musr[0m  [01;34mvar[0m
+[?2004h]0;root@808144b432cf: /root@808144b432cf:/# cs d 
+.dockerenv  boot/       etc/        lib/        media/      opt/        root/       sbin/       sys/        usr/        
+bin/        dev/        home/       lib64/      mnt/        proc/       run/        srv/        tmp/        var/        
+]0;root@808144b432cf: /root@808144b432cf:/# cd 
+.dockerenv  boot/       etc/        lib/        media/      opt/        root/       sbin/       sys/        usr/        
+bin/        dev/        home/       lib64/      mnt/        proc/       run/        srv/        tmp/        var/        
+]0;root@808144b432cf: /root@808144b432cf:/# cd usr
+[?2004l[?2004h]0;root@808144b432cf: /usrroot@808144b432cf:/usr# cd src
+[?2004l[?2004h]0;root@808144b432cf: /usr/srcroot@808144b432cf:/usr/src# mkdir app
+[?2004l[?2004h]0;root@808144b432cf: /usr/srcroot@808144b432cf:/usr/src# cd app
+[?2004l[?2004h]0;root@808144b432cf: /usr/src/approot@808144b432cf:/usr/src/app# touch index.js
+[?2004l[?2004h]0;root@808144b432cf: /usr/src/approot@808144b432cf:/usr/src/app# ls
+[?2004lindex.js
+[?2004h]0;root@808144b432cf: /usr/src/approot@808144b432cf:/usr/src/app# exit
+[?2004lexit
+[?2004h]0;moreno@Torre-de-Moreno: /mnt/d/Files/Programacion/FullStackOpen/part12/part12-containers-applications/script-answers[01;32mmoreno@Torre-de-Moreno[00m:[01;34m/mnt/d/Files/Programacion/FullStackOpen/part12/part12-containers-applications/script-answers[00m$ exit
+[?2004lexit
+
+Script done on 2024-07-08 13:26:00+02:00 [COMMAND_EXIT_CODE="0"]
