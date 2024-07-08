@@ -1,22 +1,32 @@
 Script started on 2024-07-08 13:33:37+02:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="230" LINES="36"]
-[?2004h]0;moreno@Torre-de-Moreno: /mnt/d/Files/Programacion/FullStackOpen/part12/part12-containers-applications/script-answers[01;32mmoreno@Torre-de-Moreno[00m:[01;34m/mnt/d/Files/Programacion/FullStackOpen/part12/part12-containers-applications/script-answers[00m$ [Aexit[Adocker container run -it ubuntu bash
-[?2004l[?2004h]0;root@adf3211fb52e: /root@adf3211fb52e:/# llss
-[?2004l[0m[01;36mbin[0m  [01;34mboot[0m  [01;34mdev[0m  [01;34metc[0m  [01;34mhome[0m  [01;36mlib[0m  [01;36mlib64[0m  [01;34mmedia[0m  [01;34mmnt[0m  [01;34mopt[0m  [01;34mproc[0m  [01;34mroot[0m  [01;34mrun[0m  [01;36msbin[0m  [01;34msrv[0m  [01;34msys[0m  [30;42mtmp[0m  [01;34musr[0m  [01;34mvar[0m
-[?2004h]0;root@adf3211fb52e: /root@adf3211fb52e:/# ccdd  uussrr
-[?2004l[?2004h]0;root@adf3211fb52e: /usrroot@adf3211fb52e:/usr# llss
-[?2004l[0m[01;34mbin[0m  [01;34mgames[0m  [01;34minclude[0m  [01;34mlib[0m  [01;34mlib64[0m  [01;34mlibexec[0m  [01;34mlocal[0m  [01;34msbin[0m  [01;34mshare[0m  [01;34msrc[0m
-[?2004h]0;root@adf3211fb52e: /usrroot@adf3211fb52e:/usr# ccdd  ssrrcc
-[?2004l[?2004h]0;root@adf3211fb52e: /usr/srcroot@adf3211fb52e:/usr/src# llss
-[?2004l[?2004h]0;root@adf3211fb52e: /usr/srcroot@adf3211fb52e:/usr/src# ccdd  mmkkddiirr  aapppp
-[?2004l[?2004h]0;root@adf3211fb52e: /usr/srcroot@adf3211fb52e:/usr/src# llss
-[?2004l[0m[01;34mapp[0m
-[?2004h]0;root@adf3211fb52e: /usr/srcroot@adf3211fb52e:/usr/src# ccdd  aapppp
-[?2004l[?2004h]0;root@adf3211fb52e: /usr/src/approot@adf3211fb52e:/usr/src/app# ttoouucchh  iinnddeexx..jjss
-[?2004l[?2004h]0;root@adf3211fb52e: /usr/src/approot@adf3211fb52e:/usr/src/app# llss
-[?2004lindex.js
-[?2004h]0;root@adf3211fb52e: /usr/src/approot@adf3211fb52e:/usr/src/app# eexxiitt
-[?2004lexit
-[?2004h]0;moreno@Torre-de-Moreno: /mnt/d/Files/Programacion/FullStackOpen/part12/part12-containers-applications/script-answers[01;32mmoreno@Torre-de-Moreno[00m:[01;34m/mnt/d/Files/Programacion/FullStackOpen/part12/part12-containers-applications/script-answers[00m$ eexxiitt
-[?2004lexit
+
+part12-containers-applications/script-answers> $ docker container run -it ubuntu bash
+
+root@adf3211fb52e:/# ls
+bin  boot  dev  etc  home  lib  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+
+root@adf3211fb52e:/# cd  usr
+
+root@adf3211fb52e:/usr# ls
+bin  games  include  lib  libexec  local  sbin  share  src
+
+root@adf3211fb52e:/usr# cd  src
+
+root@adf3211fb52e:/usr/src# ls
+
+root@adf3211fb52e:/usr/src# mkdir app
+
+root@adf3211fb52e:/usr/src# ls
+
+root@adf3211fb52e:/usr/src# cd app
+
+root@adf3211fb52e:/usr/src/app# touch index.js
+
+root@adf3211fb52e:/usr/src/app# ls
+index.js
+
+root@adf3211fb52e:/usr/src/app# exit
+
+part12-containers-applications/script-answers> $ exit
 
 Script done on 2024-07-08 13:34:36+02:00 [COMMAND_EXIT_CODE="0"]
