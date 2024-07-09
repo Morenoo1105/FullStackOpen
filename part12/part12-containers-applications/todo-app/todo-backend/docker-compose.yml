@@ -1,0 +1,6 @@
+services:
+  app:
+    image: exercise12_5
+    build: .
+    ports:
+      - 3000:3000
