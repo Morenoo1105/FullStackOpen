@@ -1,0 +1,67 @@
+Script started on 2024-07-09 16:05:34+02:00 [TERM="xterm-256color" TTY="/dev/pts/4" COLUMNS="230" LINES="35"]
+
+todo-app/todo-backend$ docker exec -it todo-backend-mongo-1 mongosh -u root -p example
+Connecting to:          mongodb://<credentials>@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.10
+Using MongoDB:          7.0.12
+Using Mongosh:          2.2.10
+
+test> show dbs
+admin         100.00 KiB
+config         72.00 KiB
+local          72.00 KiB
+the_database   56.00 KiB
+
+test> use the_database
+switched to db the_database
+
+the_database> show collections
+todos
+
+the_database> db.todos.find({})
+[
+  {
+    _id: ObjectId('668d285d9c3940ab45149f48'),
+    text: 'Write extra code',
+    done: false
+  },
+  {
+    _id: ObjectId('668d285d9c3940ab45149f49'),
+    text: 'Learn about containers',
+    done: false
+  }
+]
+
+the_database> db.todos.insertOne({text:"Increase the number of tools in my tool belt", done: false})
+{
+  acknowledged: true,
+  insertedId: ObjectId('668d447352f844f9eb149f49')
+  insertedId: ObjectId('668d447352f844f9eb149f49')
+}
+
+the_database> db.todos.find({})
+[
+  {
+    _id: ObjectId('668d285d9c3940ab45149f48'),
+    _id: ObjectId('668d285d9c3940ab45149f48'),
+    text: 'Write extra code',
+    done: false
+  },
+  {
+    _id: ObjectId('668d285d9c3940ab45149f49'),
+    text: 'Learn about containers',
+    done: false
+  },
+  {
+    _id: ObjectId('668d447352f844f9eb149f49'),
+    text: 'Increase the number of tools in my tool belt',
+    done: false
+  }
+]
+
+the_database> exit
+
+todo-app/todo-backend$ exit
+
+Script done on 2024-07-09 16:09:02+02:00 [COMMAND_EXIT_CODE="0"]
+
+

@@ -5,3 +5,13 @@ Content-Type: application/json
 	"text": "Write extra code",
 	"done": false
 }
+
+###
+
+POST http://localhost:3000/todos HTTP/1.1
+Content-Type: application/json
+
+{
+	"text": "Add new todos again again again",
+	"done": true
+}
