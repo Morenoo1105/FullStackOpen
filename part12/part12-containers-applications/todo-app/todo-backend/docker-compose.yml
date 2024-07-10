@@ -1,6 +1,6 @@
 services:
   app:
-    image: exercise12_5
+    image: todo-backend
     build: .
     ports:
       - 3000:3000

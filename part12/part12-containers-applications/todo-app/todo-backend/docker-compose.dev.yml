@@ -14,7 +14,7 @@ services:
 
     environment:
       - REDIS_URL=redis://redis:6379
-      - MONGO_URL=mongodb://the_username:the_password@localhost:3456/the_database
+      - MONGO_URL=mongodb://the_username:the_password@localhost:27017/the_database
 
   mongo:
     image: mongo
@@ -26,7 +26,7 @@ services:
       MONGO_INITDB_DATABASE: the_database
     volumes:
       - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
-      - mongo_data:/data/db
+      - ./mongo_data:/data/db
 
   redis:
     image: redis
