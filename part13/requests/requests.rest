@@ -1,4 +1,4 @@
-POST http://localhost:3001/api/blogs HTTP/1.1
+POST http://localhost:3003/api/blogs HTTP/1.1
 Content-Type: application/json
 
 {
@@ -9,12 +9,12 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:3001/api/users HTTP/1.1
+POST http://localhost:3003/api/users HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "jordiwild",
-    "name": "Jorge Salvaje"
+    "username": "gstilton",
+    "name": "Geronimo Stilton"
 }
 
 ###

@@ -13,6 +13,10 @@ const userFinder = async (req, res, next) => {
 };
 
 const errorHandler = async (err, req, res, next) => {
+  if (err.name === "SequelizeValidationError") {
+    return res.status(400).send({ message: err.errors[0].message });
+  }
+
   res.status(400).send({ message: err.message });
 };
 

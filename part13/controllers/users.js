@@ -13,12 +13,12 @@ router.get("/", async (req, res) => {
   res.json(users);
 });
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   try {
     const user = await User.create(req.body);
     res.json(user);
   } catch (error) {
-    return res.status(400).json({ error });
+    next(error);
   }
 });
 
@@ -31,12 +31,16 @@ router.get("/:username", async (req, res) => {
   }
 });
 
-router.put("/:username", userFinder, async (req, res) => {
+router.put("/:username", userFinder, async (req, res, next) => {
   if (!req.user) res.status(404).end();
 
-  req.user.username = req.body.username;
-  await req.user.save();
-  res.json({ username: req.user.username });
+  try {
+    req.user.username = req.body.username;
+    await req.user.save();
+    res.json({ username: req.user.username });
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
