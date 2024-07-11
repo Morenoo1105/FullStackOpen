@@ -1,3 +1,4 @@
+/*
 require("dotenv").config();
 const { Sequelize, QueryTypes } = require("sequelize");
 
@@ -18,5 +19,4 @@ const main = async () => {
     console.error("Unable to close database: ", error);
   }
 };
-
-main();
+*/
