@@ -1,0 +1,7 @@
+[submodule "part11/full-stack-open-pokedex"]
+	path = part11/full-stack-open-pokedex
+	url = https://github.com/Morenoo1105/full-stack-open-pokedex
+
+[submodule "part11/full-stack-open-p11-bloglist"]
+	path = part11/full-stack-open-p11-bloglist
+	url = https://github.com/Morenoo1105/full-stack-open-p11-bloglist
