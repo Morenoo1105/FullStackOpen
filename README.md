@@ -23,6 +23,8 @@ También incluye una sección sobre **GraphQL**, una alternativa moderna a las A
 
 En este repositorio se encuentran recogidos **todos** y cada uno de **los ejercicios propuestos** por la Universidad, en sus respectivos directorios nombrados con el número de la parte a la que corresponden.
 
+---
+
 ### 📜 Certificados (14 ECTS)
 
 - [Certificado Partes 1 - 7](https://studies.cs.helsinki.fi/stats/api/certificate/fullstackopen/en/fc56fc01d38c275f74fc392a858ec7f6)
